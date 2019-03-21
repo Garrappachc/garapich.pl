@@ -1,0 +1,24 @@
+.album {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: 0 1rem;
+
+  .album-grid {
+    display: flex;
+    flex-flow: row wrap;
+
+    .image-wrapper {
+      margin: .5rem;
+
+      &>img {
+        display: block;
+        animation: fadeIn 1s;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    }
+  }
+}
