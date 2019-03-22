@@ -8,6 +8,7 @@ const main = async () => {
   const album = await fetchAlbum('mILeSP9');
   const title = album.data.title;
   headerEl.innerHTML = title;
+  document.title = title;
 
   const images = album.data.images;
 

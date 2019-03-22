@@ -6,14 +6,25 @@ const imgurThumbnailOptions = {
   height: 640,
 };
 
+const createSpinner = () => {
+  const spinnerEl = document.createElement('div');
+  spinnerEl.classList.add('spinner');
+  return spinnerEl;
+}
+
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.intersectionRatio > 0) {
       observer.unobserve(entry.target);
 
       setTimeout(async () => {
+        const spinnerEl = createSpinner();
+        entry.target.appendChild(spinnerEl);
+
         const thumbnailSrc = entry.target.dataset.thumbnailSrc;
         const image = await loadImage(thumbnailSrc);
+
+        entry.target.removeChild(spinnerEl);
         entry.target.appendChild(image);
       }, 0);
     }

@@ -1,3 +1,5 @@
+@import 'spinner';
+
 .album {
   margin: 0 auto;
   max-width: 1400px;
@@ -9,6 +11,11 @@
 
     .image-wrapper {
       margin: .5rem;
+      position: relative;
+
+      .spinner {
+        @include make-spinner();
+      }
 
       &>img {
         display: block;
