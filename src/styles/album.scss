@@ -12,14 +12,10 @@
     .image-wrapper {
       margin: .5rem;
       position: relative;
+      cursor: pointer;
 
       .spinner {
         @include make-spinner();
-      }
-
-      &>img {
-        display: block;
-        animation: fadeIn 1s;
       }
 
       @keyframes fadeIn {
@@ -27,7 +23,15 @@
         to { opacity: 1; }
       }
 
+      &>img {
+        display: block;
+        animation: fadeIn 1s;
+      }
+
       .overlay {
+        opacity: 0;
+        transition: opacity 0.2s linear;
+
         position: absolute;
         bottom: 0px;
         left: 0px;
@@ -44,6 +48,10 @@
         .description {
           margin: 1rem 1rem;
         }
+      }
+
+      &:hover .overlay {
+        opacity: 1;
       }
     }
   }
