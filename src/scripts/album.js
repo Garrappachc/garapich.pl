@@ -58,6 +58,17 @@ export async function appendImage(imageData) {
   const thumbnailSrc = `https://i.imgur.com/${imageData.id}${imgurThumbnailOptions.suffix}.png`;
   imageWrapperEl.dataset.thumbnailSrc = thumbnailSrc;
 
+  const overlayEl = document.createElement('div');
+  overlayEl.classList.add('overlay');
+
+  if (imageData.description) {
+    const descriptionEl = document.createElement('p');
+    descriptionEl.classList.add('description');
+    descriptionEl.innerText = imageData.description;
+    overlayEl.appendChild(descriptionEl);
+  }
+  imageWrapperEl.appendChild(overlayEl);
+
   albumEl.appendChild(imageWrapperEl);
   observer.observe(imageWrapperEl);
 }
