@@ -3,11 +3,11 @@ const ImgurClientId = '77f74666e292304';
 
 const ImgurOptions = {
   headers: {
-    'Authorization': `Client-ID ${ImgurClientId}`,
-  }
+    Authorization: `Client-ID ${ImgurClientId}`,
+  },
 };
 
-export function fetchAlbum(albumId) {
-  return fetch(`${ImgurEndpoint}/album/${albumId}`, ImgurOptions).then(response => response.json());
+export default async function fetchAlbum(albumId) {
+  const response = await fetch(`${ImgurEndpoint}/album/${albumId}`, ImgurOptions);
+  return response.json();
 }
-

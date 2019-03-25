@@ -1,21 +1,17 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'babel-polyfill';
-import { fetchAlbum } from './imgur';
-import { appendImage } from './album';
+import fetchAlbum from './imgur';
+import appendImage from './album';
 
 const headerEl = document.querySelector('.header');
 
 const main = async () => {
   const album = await fetchAlbum('mILeSP9');
-  const title = album.data.title;
+  const { title, images } = album.data;
   headerEl.innerHTML = title;
   document.title = title;
 
-  const images = album.data.images;
-
-  for (const image of images.reverse()) {
-    await appendImage(image);
-  }
+  images.reverse().forEach(async image => appendImage(image));
 };
 
 main();
-
