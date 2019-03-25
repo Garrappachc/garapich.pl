@@ -1,3 +1,4 @@
+@import 'animations';
 @import 'spinner';
 
 .album {
@@ -11,47 +12,20 @@
 
     .image-wrapper {
       margin: .5rem;
+      display: block;
       position: relative;
-      cursor: pointer;
+
+      &.ghost {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
 
       .spinner {
         @include make-spinner();
       }
 
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-
       &>img {
         display: block;
-        animation: fadeIn 1s;
-      }
-
-      .overlay {
-        opacity: 0;
-        transition: opacity 0.2s linear;
-
-        position: absolute;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        height: 50px;
-        z-index: 99;
-
-        background-image: linear-gradient(rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 30));
-
-        * {
-          color: #ffffff;
-        }
-
-        .description {
-          margin: 1rem 1rem;
-        }
-      }
-
-      &:hover .overlay {
-        opacity: 1;
+        @include fadeIn;
       }
     }
   }

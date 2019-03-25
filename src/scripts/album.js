@@ -26,6 +26,7 @@ const observer = new IntersectionObserver(entries => {
 
         entry.target.removeChild(spinnerEl);
         entry.target.appendChild(image);
+        entry.target.classList.remove('ghost');
       }, 0);
     }
   });
@@ -48,8 +49,13 @@ async function loadImage(src) {
 }
 
 export async function appendImage(imageData) {
-  const imageWrapperEl = document.createElement('div');
-  imageWrapperEl.classList.add('image-wrapper');
+  const imageWrapperEl = document.createElement('a');
+  imageWrapperEl.classList.add('image-wrapper', 'ghost');
+  imageWrapperEl.href = imageData.link;
+
+  if (!!imageData.title) {
+    imageWrapperEl.title = imageData.title;
+  }
 
   const [ thumbWidth, thumbHeight ] = calculateThumbnailRatio(imageData.width, imageData.height);
   imageWrapperEl.style.minWidth = `${thumbWidth}px`;
@@ -57,17 +63,6 @@ export async function appendImage(imageData) {
 
   const thumbnailSrc = `https://i.imgur.com/${imageData.id}${imgurThumbnailOptions.suffix}.png`;
   imageWrapperEl.dataset.thumbnailSrc = thumbnailSrc;
-
-  const overlayEl = document.createElement('div');
-  overlayEl.classList.add('overlay');
-
-  if (imageData.description) {
-    const descriptionEl = document.createElement('p');
-    descriptionEl.classList.add('description');
-    descriptionEl.innerText = imageData.description;
-    overlayEl.appendChild(descriptionEl);
-  }
-  imageWrapperEl.appendChild(overlayEl);
 
   albumEl.appendChild(imageWrapperEl);
   observer.observe(imageWrapperEl);
