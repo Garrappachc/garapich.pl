@@ -1,70 +1,30 @@
-const albumEl = document.querySelector('.album-grid');
+import ImageEntry from './image-entry';
 
-const imgurThumbnailOptions = {
-  suffix: 'l',
-  width: 640,
-  height: 640,
-};
+export default class Album {
+  constructor(element) {
+    this.element = element;
+    this.images = [];
 
-function createSpinner() {
-  const spinnerEl = document.createElement('div');
-  spinnerEl.classList.add('spinner');
-  return spinnerEl;
-}
+    this.observer = new IntersectionObserver((entries) => {
+      entries
+        .filter(entry => entry.intersectionRatio > 0)
+        .forEach((entry) => {
+          this.observer.unobserve(entry.target);
+          const { imageId } = entry.target.dataset;
 
-async function loadImage(src) {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.onload = () => {
-      resolve(image);
-    };
-
-    image.src = src;
-  });
-}
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.intersectionRatio > 0) {
-      observer.unobserve(entry.target);
-
-      setTimeout(async () => {
-        const spinnerEl = createSpinner();
-        entry.target.appendChild(spinnerEl);
-
-        const { thumbnailSrc } = entry.target.dataset;
-        const image = await loadImage(thumbnailSrc);
-
-        entry.target.removeChild(spinnerEl);
-        entry.target.appendChild(image);
-        entry.target.classList.remove('ghost');
-      }, 0);
-    }
-  });
-});
-
-function calculateThumbnailRatio(srcWidth, srcHeight) {
-  const ratio = Math.min(imgurThumbnailOptions.width / srcWidth,
-    imgurThumbnailOptions.height / srcHeight);
-  return [srcWidth * ratio, srcHeight * ratio];
-}
-
-export default async function appendImage(imageData) {
-  const imageWrapperEl = document.createElement('a');
-  imageWrapperEl.classList.add('image-wrapper', 'ghost');
-  imageWrapperEl.href = imageData.link;
-
-  if (imageData.title) {
-    imageWrapperEl.title = imageData.title;
+          setTimeout(async () => {
+            const image = this.images[imageId];
+            await image.loadThumbnail();
+          }, 0);
+        });
+    });
   }
 
-  const [thumbWidth, thumbHeight] = calculateThumbnailRatio(imageData.width, imageData.height);
-  imageWrapperEl.style.minWidth = `${thumbWidth}px`;
-  imageWrapperEl.style.minHeight = `${thumbHeight}px`;
-
-  const thumbnailSrc = `https://i.imgur.com/${imageData.id}${imgurThumbnailOptions.suffix}.png`;
-  imageWrapperEl.dataset.thumbnailSrc = thumbnailSrc;
-
-  albumEl.appendChild(imageWrapperEl);
-  observer.observe(imageWrapperEl);
+  addImage(data) {
+    const image = new ImageEntry(data);
+    const id = this.images.push(image) - 1;
+    image.element.dataset.imageId = id;
+    this.observer.observe(image.element);
+    this.element.appendChild(image.element);
+  }
 }
