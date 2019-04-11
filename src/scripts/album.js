@@ -1,9 +1,11 @@
 import ImageEntry from './image-entry';
+import Overlay from './overlay';
 
 export default class Album {
   constructor(element) {
     this.element = element;
     this.images = [];
+    this.overlay = new Overlay();
 
     this.observer = new IntersectionObserver((entries) => {
       entries
@@ -26,5 +28,9 @@ export default class Album {
     image.element.dataset.imageId = id;
     this.observer.observe(image.element);
     this.element.appendChild(image.element);
+
+    image.click = () => {
+      this.overlay.toggle();
+    };
   }
 }

@@ -12,7 +12,7 @@ const main = async () => {
   headerEl.innerHTML = title;
   document.title = title;
 
-  images.reverse().forEach(async image => album.addImage(image));
+  images.reverse().forEach(image => album.addImage(image));
 };
 
 main();

@@ -45,6 +45,8 @@ export default class ImageEntry {
   constructor(data) {
     this.data = data;
     this.element = createWrapperElement(this.data);
+    this.click = () => {};
+    this.element.onclick = (event) => { event.preventDefault(); this.click(); };
   }
 
   get thumbnailSrc() {
